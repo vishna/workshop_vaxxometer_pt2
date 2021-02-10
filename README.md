@@ -219,7 +219,7 @@ bottomNavigationBar: isPortrait
     : null,
 ```
 
-### Pimp my list
+#### Pimp my list
 
 This is [a visual list of](https://commons.wikimedia.org/wiki/File:Map_germany_with_coats-of-arms.png) German states. It probably won't change in 2021 unless Bavaria declares independence.
 
@@ -235,4 +235,53 @@ const coatOfArms = <String, String>{
       "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Bayern_Wappen.svg/200px-Bayern_Wappen.svg.png",
   /// ...and so on
 };
+```
+
+#### Use Cached Network Image
+
+To display those logos we need to add [cached network image](https://pub.dev/packages/cached_network_image) to the list of our dependencies.
+
+Modify `pubspec.yaml` so that it has this dependency:
+
+```yaml
+dependencies:
+  http: ^0.12.2
+  cached_network_image: ^2.5.0
+  flutter:
+    sdk: flutter
+```
+
+You might need to cold restart the app to update platform's deps.
+
+#### Add image to list item
+
+In the `StateEntryWidget` modify build so that you have logo link resolved in the build method and use `CachedNetworkImage`
+
+```dart
+Widget build(BuildContext context) {
+  final imageUrl = coatOfArms[entry.name]; // add this
+  return InkWell(
+    // ...
+    child: Row(
+      children: [
+        // add this
+        if (imageUrl != null) CachedNetworkImage(
+          imageUrl: imageUrl
+        ),
+        // other vaccination data
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+```
+
+while this works, logo is too large, let's quickly ask it to be a bit smaller:
+
+```dart
+CachedNetworkImage(
+  height: 40.0,
+  width: 40.0,
+  imageUrl: imageUrl,
+),
 ```

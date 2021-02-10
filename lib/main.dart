@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -194,6 +195,7 @@ class StateEntryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = coatOfArms[entry.name];
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -207,6 +209,14 @@ class StateEntryWidget extends StatelessWidget {
       },
       child: Row(
         children: [
+          // coat of arms
+          if (imageUrl != null)
+            CachedNetworkImage(
+              height: 40.0,
+              width: 40.0,
+              imageUrl: imageUrl,
+            ),
+          // data
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
