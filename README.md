@@ -41,3 +41,13 @@ bottomNavigationBar: BottomNavigationBar(
   },
 )
 ```
+
+In the onTap we need to convert index to sortingType, so:
+
+```dart
+onTap: (index) {
+  setState(() {
+    sortingType = SortingType.values[index];
+  });
+}
+```

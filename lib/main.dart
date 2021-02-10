@@ -140,11 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: items.length,
             );
           }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _switchSortingType,
-        tooltip: sortingType.tooltip,
-        child: Icon(sortingType.iconData),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -162,7 +157,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         currentIndex: SortingType.values.indexOf(sortingType),
         onTap: (index) {
-          // TODO implement
+          setState(() {
+            sortingType = SortingType.values[index];
+          });
         },
       ),
     );
