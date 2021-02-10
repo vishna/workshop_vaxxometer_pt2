@@ -17,6 +17,8 @@ We want to replace FAB button with something that has better UX. We'll use:
 - [Bottom Bar](https://api.flutter.dev/flutter/material/BottomNavigationBar-class.html) (for screens with portrait/square ratio)
 - [Navigation Rail](https://api.flutter.dev/flutter/material/NavigationRail-class.html) (for screens with landscape ratio)
 
+<img width="200" alt="Screenshot 2021-02-10 at 17 18 38" src="https://user-images.githubusercontent.com/121164/107538286-167d3b00-6bc4-11eb-9011-94da4d0f3298.png"> <img width="400" alt="Screenshot 2021-02-10 at 17 18 44" src="https://user-images.githubusercontent.com/121164/107538307-1bda8580-6bc4-11eb-96bb-b3ce83c1c5e8.png">
+
 #### Adding bottom bar
 
 We start by removing `floatingActionButton` and adding `bottomNavigationBar` instead:
@@ -188,4 +190,31 @@ We need to switch between navigation rail/bottom bar based on screen ratio, for 
 ```dart
 final data = MediaQuery.of(context);
 final isLandscape = data.size.width > data.size.height;
+final isPortrait = !isLandscape;
+```
+
+```dart
+// when screen is landscape
+body: Row(
+  children: [
+    // navigation rail
+    if (isLandscape)
+      NavigationRail(
+        selectedIndex: currentIndex,
+        onDestinationSelected: _onSortingSelected,
+        labelType: NavigationRailLabelType.selected,
+        destinations: railItems,
+      ),
+    if (isLandscape) VerticalDivider(thickness: 1, width: 1),
+    // app content
+    Expanded(
+
+// when screen is portrait
+bottomNavigationBar: isPortrait
+    ? BottomNavigationBar(
+        items: barItems,
+        currentIndex: currentIndex,
+        onTap: _onSortingSelected,
+      )
+    : null,
 ```

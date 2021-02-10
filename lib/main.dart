@@ -99,6 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final data = MediaQuery.of(context);
     final isLandscape = data.size.width > data.size.height;
+    final isPortrait = !isLandscape;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -106,13 +107,14 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Row(
         children: [
           // navigation rail
-          NavigationRail(
-            selectedIndex: currentIndex,
-            onDestinationSelected: _onSortingSelected,
-            labelType: NavigationRailLabelType.selected,
-            destinations: railItems,
-          ),
-          VerticalDivider(thickness: 1, width: 1),
+          if (isLandscape)
+            NavigationRail(
+              selectedIndex: currentIndex,
+              onDestinationSelected: _onSortingSelected,
+              labelType: NavigationRailLabelType.selected,
+              destinations: railItems,
+            ),
+          if (isLandscape) VerticalDivider(thickness: 1, width: 1),
           // app content
           Expanded(
             child: FutureBuilder<List<StateEntry>>(
@@ -158,11 +160,13 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: barItems,
-        currentIndex: currentIndex,
-        onTap: _onSortingSelected,
-      ),
+      bottomNavigationBar: isPortrait
+          ? BottomNavigationBar(
+              items: barItems,
+              currentIndex: currentIndex,
+              onTap: _onSortingSelected,
+            )
+          : null,
     );
   }
 }
