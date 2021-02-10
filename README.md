@@ -219,7 +219,7 @@ bottomNavigationBar: isPortrait
     : null,
 ```
 
-#### Pimp my list
+#### Fun with Flags
 
 This is [a visual list of](https://commons.wikimedia.org/wiki/File:Map_germany_with_coats-of-arms.png) German states. It probably won't change in 2021 unless Bavaria declares independence.
 
@@ -236,6 +236,8 @@ const coatOfArms = <String, String>{
   /// ...and so on
 };
 ```
+
+Full list available [here](https://gist.github.com/vishna/9cfa8a08b752351608319d5ce4ccae77)
 
 #### Use Cached Network Image
 
