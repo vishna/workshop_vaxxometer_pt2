@@ -87,59 +87,87 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var sortingType = SortingType.byName;
 
-  void _switchSortingType() {
-    setState(() {
-      final nextIndex = SortingType.values.indexOf(sortingType) + 1;
-      sortingType = SortingType.values[nextIndex % SortingType.values.length];
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: FutureBuilder<List<StateEntry>>(
-          future: fetchData(),
-          builder: (context, snapshot) {
-            // an error occured
-            if (snapshot.hasError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'An error occured ${snapshot.error}',
-                    ),
-                  ],
-                ),
-              );
-            }
+      body: Row(
+        children: [
+          // navigation rail
+          NavigationRail(
+            selectedIndex: 0,
+            onDestinationSelected: (int index) {
+              setState(() {
+                // TODO
+              });
+            },
+            labelType: NavigationRailLabelType.selected,
+            destinations: [
+              NavigationRailDestination(
+                icon: Icon(Icons.favorite_border),
+                selectedIcon: Icon(Icons.favorite),
+                label: Text('First'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.bookmark_border),
+                selectedIcon: Icon(Icons.book),
+                label: Text('Second'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.star_border),
+                selectedIcon: Icon(Icons.star),
+                label: Text('Third'),
+              ),
+            ],
+          ),
+          VerticalDivider(thickness: 1, width: 1),
+          // app content
+          Expanded(
+            child: FutureBuilder<List<StateEntry>>(
+                future: fetchData(),
+                builder: (context, snapshot) {
+                  // an error occured
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'An error occured ${snapshot.error}',
+                          ),
+                        ],
+                      ),
+                    );
+                  }
 
-            // there's no data yet
-            if (!snapshot.hasData) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Text(
-                      'Loading',
-                    ),
-                  ],
-                ),
-              );
-            }
+                  // there's no data yet
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CircularProgressIndicator(),
+                          Text(
+                            'Loading',
+                          ),
+                        ],
+                      ),
+                    );
+                  }
 
-            // we have data
-            final items = snapshot.data.sortedBy(sortingType);
-            return ListView.builder(
-              itemBuilder: (context, index) =>
-                  StateEntryWidget(entry: items[index]),
-              itemCount: items.length,
-            );
-          }),
+                  // we have data
+                  final items = snapshot.data.sortedBy(sortingType);
+                  return ListView.builder(
+                    itemBuilder: (context, index) =>
+                        StateEntryWidget(entry: items[index]),
+                    itemCount: items.length,
+                  );
+                }),
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: barItems,
         currentIndex: SortingType.values.indexOf(sortingType),
