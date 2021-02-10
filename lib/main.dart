@@ -141,20 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           }),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(SortingType.byQuota.iconData),
-            label: SortingType.byQuota.tooltip,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(SortingType.byVaccinated.iconData),
-            label: SortingType.byVaccinated.tooltip,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(SortingType.byName.iconData),
-            label: SortingType.byName.tooltip,
-          ),
-        ],
+        items: barItems,
         currentIndex: SortingType.values.indexOf(sortingType),
         onTap: (index) {
           setState(() {
@@ -165,6 +152,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+final barItems = SortingType.values
+    .map((it) => BottomNavigationBarItem(
+          icon: Icon(it.iconData),
+          label: it.tooltip,
+        ))
+    .toList();
 
 class StateEntryWidget extends StatelessWidget {
   final StateEntry entry;

@@ -51,3 +51,33 @@ onTap: (index) {
   });
 }
 ```
+
+We can extract bottom bar items to a variable called `barItems`:
+
+```dart
+final barItems = <BottomNavigationBarItem>[
+  BottomNavigationBarItem(
+    icon: Icon(SortingType.byQuota.iconData),
+    label: SortingType.byQuota.tooltip,
+  ),
+  BottomNavigationBarItem(
+    icon: Icon(SortingType.byVaccinated.iconData),
+    label: SortingType.byVaccinated.tooltip,
+  ),
+  BottomNavigationBarItem(
+    icon: Icon(SortingType.byName.iconData),
+    label: SortingType.byName.tooltip,
+  ),
+];
+```
+
+and make these simpler using `map` function:
+
+```dart
+final barItems = SortingType.values
+    .map((it) => BottomNavigationBarItem(
+          icon: Icon(it.iconData),
+          label: it.tooltip,
+        ))
+    .toList();
+```
