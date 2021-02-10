@@ -319,3 +319,60 @@ so your structure looks something like this:
 <img width="370" alt="Screenshot 2021-02-10 at 23 07 01" src="https://user-images.githubusercontent.com/121164/107579240-206b6200-6bf5-11eb-94c9-1e9bb7e98232.png">
 
 This means renaming `MyHomePage` and `SecondRoute` to something more appropriate
+
+### Fix delegation in StateEntryWidget
+
+`StateEntryWidget` calls __out of the blue__ a new page `StateDetailScreen` when tapped. It would make sense to make it more reusable by removing this logic from the widget to somewhere more appropriate. We can do this by providing `onTap` as a class constructor parameter.
+
+Use:
+
+```dart
+final void Function() onTap;
+```
+
+or predefined typedef alias:
+```dart
+final VoidCallback onTap;
+```
+
+...so this:
+
+```dart
+class StateEntryWidget extends StatelessWidget {
+  final StateEntry entry;
+
+  const StateEntryWidget({Key key, this.entry}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = coatOfArms[entry.name];
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StateDetailScreen(
+              entry: entry,
+            ),
+          ),
+        );
+      },
+```
+
+becomes this:
+
+```dart
+class StateEntryWidget extends StatelessWidget {
+  final StateEntry entry;
+  final VoidCallback onTap;
+
+  const StateEntryWidget({Key key, this.entry, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = coatOfArms[entry.name];
+    return InkWell(
+      onTap: onTap,
+```
+
+Therefore the existing closure needs to be moved from `StateEntryWidget` to `StatesScreen`

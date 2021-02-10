@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vaxxometer/misc/api.dart';
 import 'package:vaxxometer/models/sorting_type.dart';
 import 'package:vaxxometer/models/state_entry.dart';
+import 'package:vaxxometer/screens/state_detail_screen.dart';
 import 'package:vaxxometer/widgets/state_entry_widget.dart';
 
 class StatesScreen extends StatefulWidget {
@@ -81,8 +82,19 @@ class _StatesScreenState extends State<StatesScreen> {
                   // we have data
                   final items = snapshot.data.sortedBy(sortingType);
                   return ListView.builder(
-                    itemBuilder: (context, index) =>
-                        StateEntryWidget(entry: items[index]),
+                    itemBuilder: (context, index) => StateEntryWidget(
+                      entry: items[index],
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StateDetailScreen(
+                              entry: items[index],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                     itemCount: items.length,
                   );
                 }),

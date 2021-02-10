@@ -4,28 +4,18 @@ import 'package:flutter/widgets.dart';
 import 'package:vaxxometer/misc/coat_of_arms.dart';
 import 'package:vaxxometer/misc/design.dart';
 import 'package:vaxxometer/models/state_entry.dart';
-import 'package:vaxxometer/screens/state_detail_screen.dart';
 
 class StateEntryWidget extends StatelessWidget {
   final StateEntry entry;
+  final VoidCallback onTap;
 
-  const StateEntryWidget({Key key, this.entry}) : super(key: key);
+  const StateEntryWidget({Key key, this.entry, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final imageUrl = coatOfArms[entry.name];
     return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          // FIXME this shouldn't be here, pass callback instead
-          MaterialPageRoute(
-            builder: (context) => StateDetailScreen(
-              entry: entry,
-            ),
-          ),
-        );
-      },
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
