@@ -87,6 +87,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var sortingType = SortingType.byName;
 
+  int get currentIndex => SortingType.values.indexOf(sortingType);
+
+  void _onSortingSelected(int index) {
+    setState(() {
+      sortingType = SortingType.values[index];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,12 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           // navigation rail
           NavigationRail(
-            selectedIndex: 0,
-            onDestinationSelected: (int index) {
-              setState(() {
-                // TODO
-              });
-            },
+            selectedIndex: currentIndex,
+            onDestinationSelected: _onSortingSelected,
             labelType: NavigationRailLabelType.selected,
             destinations: railItems,
           ),
@@ -154,12 +158,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: barItems,
-        currentIndex: SortingType.values.indexOf(sortingType),
-        onTap: (index) {
-          setState(() {
-            sortingType = SortingType.values[index];
-          });
-        },
+        currentIndex: currentIndex,
+        onTap: _onSortingSelected,
       ),
     );
   }

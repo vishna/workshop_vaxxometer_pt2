@@ -144,3 +144,39 @@ final railItems = SortingType.values
         ))
     .toList();
 ```
+
+Wire selected index and tap callback. For the tap callback we have already implemented it for the bottom bar, thus it would be nice to reuse it. We extract callback to its own method:
+
+```dart
+void _onSortingSelected(int index) {
+  setState(() {
+    sortingType = SortingType.values[index];
+  });
+}
+```
+
+...and supply this method as callback for both bottom bar and navigation rail.
+
+```dart
+/// ...navigation rail
+onDestinationSelected: _onSortingSelected
+
+/// ...bottom bar
+onTap: _onSortingSelected,
+```
+
+We can also reuse selected index, let's define getter property on our state class:
+
+```dart
+int get currentIndex => SortingType.values.indexOf(sortingType);
+```
+
+Then we can use this value in our navigation bars:
+
+```dart
+/// ...navigation rail
+selectedIndex: currentIndex,
+
+/// ...bottom bar
+currentIndex: currentIndex,
+```
