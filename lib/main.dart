@@ -145,6 +145,26 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: sortingType.tooltip,
         child: Icon(sortingType.iconData),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(SortingType.byQuota.iconData),
+            label: SortingType.byQuota.tooltip,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(SortingType.byVaccinated.iconData),
+            label: SortingType.byVaccinated.tooltip,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(SortingType.byName.iconData),
+            label: SortingType.byName.tooltip,
+          ),
+        ],
+        currentIndex: SortingType.values.indexOf(sortingType),
+        onTap: (index) {
+          // TODO implement
+        },
+      ),
     );
   }
 }
