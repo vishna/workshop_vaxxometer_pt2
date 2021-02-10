@@ -313,3 +313,9 @@ Let's split our code into following folders/files:
 - lib/models (api classes, enums etc.)
 - lib/widgets (reusable widgets but not screens)
 - lib/screens (widgets that have `Scaffold` as their base, use widgets to build those screens)
+
+so your structure looks something like this:
+
+<img width="370" alt="Screenshot 2021-02-10 at 23 07 01" src="https://user-images.githubusercontent.com/121164/107579240-206b6200-6bf5-11eb-94c9-1e9bb7e98232.png">
+
+This means renaming `MyHomePage` and `SecondRoute` to something more appropriate
