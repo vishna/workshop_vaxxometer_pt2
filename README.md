@@ -287,3 +287,15 @@ CachedNetworkImage(
   imageUrl: imageUrl,
 ),
 ```
+
+Notice there's no padding on the left side of the state logo. Let's fix it:
+
+- Remove all existing paddings from the `StateEntryWidget` (use refactor tool)
+- Wrap entire `Row` with 8dp padding (use refactor tool again)
+- Add 8dp spacing between logo & state name and between name & percent count
+
+Define:
+
+```dart
+const SPACING_8DP = SizedBox(width: 8);
+```

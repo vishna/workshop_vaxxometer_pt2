@@ -207,19 +207,20 @@ class StateEntryWidget extends StatelessWidget {
           ),
         );
       },
-      child: Row(
-        children: [
-          // coat of arms
-          if (imageUrl != null)
-            CachedNetworkImage(
-              height: 40.0,
-              width: 40.0,
-              imageUrl: imageUrl,
-            ),
-          // data
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            // coat of arms
+            if (imageUrl != null)
+              CachedNetworkImage(
+                height: 40.0,
+                width: 40.0,
+                imageUrl: imageUrl,
+              ),
+            // data
+            if (imageUrl != null) SPACING_8DP,
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -232,19 +233,19 @@ class StateEntryWidget extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
+            SPACING_8DP,
+            Text(
               "${entry.status.quote}%",
               style: Theme.of(context).textTheme.headline4,
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 }
+
+const SPACING_8DP = SizedBox(width: 8);
 
 extension StateEntrySortingExtensions on List<StateEntry> {
   List<StateEntry> sortedByQuotaDesc() {
