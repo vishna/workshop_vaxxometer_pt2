@@ -218,3 +218,21 @@ bottomNavigationBar: isPortrait
       )
     : null,
 ```
+
+### Pimp my list
+
+This is [a visual list of](https://commons.wikimedia.org/wiki/File:Map_germany_with_coats-of-arms.png) German states. It probably won't change in 2021 unless Bavaria declares independence.
+
+Let's use coat of arms, and display them next to vaccination progress results.
+
+Define a map with appropriate images:
+
+```dart
+const coatOfArms = <String, String>{
+  "Baden-Württemberg":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Coat_of_arms_of_Baden-W%C3%BCrttemberg_%28lesser%29.svg/200px-Coat_of_arms_of_Baden-W%C3%BCrttemberg_%28lesser%29.svg.png",
+  "Bayern":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Bayern_Wappen.svg/200px-Bayern_Wappen.svg.png",
+  /// ...and so on
+};
+```

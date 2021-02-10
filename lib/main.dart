@@ -307,3 +307,10 @@ class SecondRoute extends StatelessWidget {
     );
   }
 }
+
+const coatOfArms = <String, String>{
+  "Baden-Württemberg":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Coat_of_arms_of_Baden-W%C3%BCrttemberg_%28lesser%29.svg/200px-Coat_of_arms_of_Baden-W%C3%BCrttemberg_%28lesser%29.svg.png",
+  "Bayern":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Bayern_Wappen.svg/200px-Bayern_Wappen.svg.png"
+};
