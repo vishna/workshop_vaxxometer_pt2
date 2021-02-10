@@ -221,11 +221,13 @@ bottomNavigationBar: isPortrait
 
 #### Fun with Flags
 
+![](https://media.giphy.com/media/qUlkYKZX6bqvK/giphy.gif)
+
 This is [a visual list of](https://commons.wikimedia.org/wiki/File:Map_germany_with_coats-of-arms.png) German states. It probably won't change in 2021 unless Bavaria declares independence.
 
-Let's use coat of arms, and display them next to vaccination progress results.
+Let's use coat of arms of respective states, and display them next to vaccination progress results.
 
-Define a map with appropriate images:
+Based on wiki page, define a map with appropriate images:
 
 ```dart
 const coatOfArms = <String, String>{
@@ -299,3 +301,15 @@ Define:
 ```dart
 const SPACING_8DP = SizedBox(width: 8);
 ```
+
+### Let's get organized
+
+As we were developping our app, our single file codebase grew to over 350 LOC. It's not terrible yet but might get very ugly very quickly.
+
+Let's split our code into following folders/files:
+
+- lib/main.dart (app entry)
+- lib/misc (stuff)
+- lib/models (api classes, enums etc.)
+- lib/widgets (reusable widgets but not screens)
+- lib/screens (widgets that have `Scaffold` as their base, use widgets to build those screens)

@@ -1,0 +1,34 @@
+const coatOfArms = <String, String>{
+  "Baden-Württemberg":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Coat_of_arms_of_Baden-W%C3%BCrttemberg_%28lesser%29.svg/200px-Coat_of_arms_of_Baden-W%C3%BCrttemberg_%28lesser%29.svg.png",
+  "Bayern":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Bayern_Wappen.svg/200px-Bayern_Wappen.svg.png",
+  "Berlin":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Coat_of_arms_of_Berlin.svg/200px-Coat_of_arms_of_Berlin.svg.png",
+  "Brandenburg":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Brandenburg_Wappen.svg/200px-Brandenburg_Wappen.svg.png",
+  "Bremen":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Bremen_Wappen%28Mittel%29.svg/200px-Bremen_Wappen%28Mittel%29.svg.png",
+  "Hamburg":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/DEU_Hamburg_COA.svg/200px-DEU_Hamburg_COA.svg.png",
+  "Hessen":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Coat_of_arms_of_Hesse.svg/200px-Coat_of_arms_of_Hesse.svg.png",
+  "Mecklenburg-Vorpommern":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Coat_of_arms_of_Mecklenburg-Western_Pomerania_%28great%29.svg/200px-Coat_of_arms_of_Mecklenburg-Western_Pomerania_%28great%29.svg.png",
+  "Niedersachsen":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Coat_of_arms_of_Lower_Saxony.svg/200px-Coat_of_arms_of_Lower_Saxony.svg.png",
+  "Nordrhein-Westfalen":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Coat_of_arms_of_North_Rhine-Westfalia.svg/200px-Coat_of_arms_of_North_Rhine-Westfalia.svg.png",
+  "Rheinland-Pfalz":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Coat_of_arms_of_Rhineland-Palatinate.svg/200px-Coat_of_arms_of_Rhineland-Palatinate.svg.png",
+  "Saarland":
+      "https://upload.wikimedia.org/wikipedia/commons/8/82/Coa_de-saarland_300px.png",
+  "Sachsen":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Coat_of_arms_of_Saxony.svg/200px-Coat_of_arms_of_Saxony.svg.png",
+  "Sachsen-Anhalt":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Wappen_Sachsen-Anhalt.svg/200px-Wappen_Sachsen-Anhalt.svg.png",
+  "Schleswig-Holstein":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Coat_of_arms_of_Schleswig-Holstein.svg/200px-Coat_of_arms_of_Schleswig-Holstein.svg.png",
+  "Thüringen":
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Coat_of_arms_of_Thuringia.svg/200px-Coat_of_arms_of_Thuringia.svg.png"
+};

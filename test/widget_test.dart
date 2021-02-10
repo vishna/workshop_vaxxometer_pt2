@@ -7,10 +7,9 @@
 
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:vaxxometer/main.dart';
+import 'package:vaxxometer/misc/api.dart';
+import 'package:vaxxometer/models/vaccine_status.dart';
 
 const mock_data_berlin =
     """{"total": 3644826, "rs": "11", "vaccinated": 24159, "difference_to_the_previous_day": 2204, "vaccinations_per_1000_inhabitants": 6.583746901136969, "quote": 0.66}""";
