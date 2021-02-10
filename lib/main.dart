@@ -1,4 +1,61 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+Future<List<StateEntry>> fetchData() async {
+  final response =
+      await http.get('https://rki-vaccination-data.vercel.app/api');
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return parseResponse(response.body);
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load vaccination data');
+  }
+}
+
+class VaccineStatus {
+  const VaccineStatus(
+      {this.total,
+      this.vaccinated,
+      this.difference_to_the_previous_day,
+      this.quote});
+  final int total;
+  final int vaccinated;
+  final int difference_to_the_previous_day;
+  final double quote;
+
+  factory VaccineStatus.fromJson(Map<String, dynamic> json) {
+    return VaccineStatus(
+      total: json['total'],
+      vaccinated: json['vaccinated'],
+      difference_to_the_previous_day: json['difference_to_the_previous_day'],
+      quote: json['quote'],
+    );
+  }
+}
+
+class StateEntry {
+  StateEntry({this.status, this.name});
+  final VaccineStatus status;
+  final String name;
+}
+
+List<StateEntry> parseResponse(String jsonStr) {
+  final json = jsonDecode(jsonStr);
+  final statesMap = json["states"] as Map<String, dynamic>;
+  return statesMap.keys.map((key) {
+    final vaccineStatusJson = statesMap[key];
+    return StateEntry(
+      status: VaccineStatus.fromJson(vaccineStatusJson),
+      name: key,
+    );
+  }).toList();
+}
 
 void main() {
   runApp(MyApp());
@@ -11,33 +68,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Vaccination Progress in Germany'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -46,68 +85,187 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  var sortingType = SortingType.byName;
 
-  void _incrementCounter() {
+  void _switchSortingType() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      final nextIndex = SortingType.values.indexOf(sortingType) + 1;
+      sortingType = SortingType.values[nextIndex % SortingType.values.length];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+      body: FutureBuilder<List<StateEntry>>(
+          future: fetchData(),
+          builder: (context, snapshot) {
+            // an error occured
+            if (snapshot.hasError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'An error occured ${snapshot.error}',
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            // there's no data yet
+            if (!snapshot.hasData) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Text(
+                      'Loading',
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            // we have data
+            final items = snapshot.data.sortedBy(sortingType);
+            return ListView.builder(
+              itemBuilder: (context, index) =>
+                  StateEntryWidget(entry: items[index]),
+              itemCount: items.length,
+            );
+          }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _switchSortingType,
+        tooltip: sortingType.tooltip,
+        child: Icon(sortingType.iconData),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class StateEntryWidget extends StatelessWidget {
+  final StateEntry entry;
+
+  const StateEntryWidget({Key key, this.entry}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SecondRoute(
+              entry: entry,
             ),
-            Text(
-              '$_counter',
+          ),
+        );
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    entry.name,
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  Text(
+                      "${entry.status.vaccinated} out of ${entry.status.total} vaccinted"),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "${entry.status.quote}%",
               style: Theme.of(context).textTheme.headline4,
             ),
-          ],
-        ),
+          )
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+extension StateEntrySortingExtensions on List<StateEntry> {
+  List<StateEntry> sortedByQuotaDesc() {
+    final output = List<StateEntry>.from(this);
+    output.sort((a, b) => b.status.quote.compareTo(a.status.quote));
+    return output;
+  }
+
+  List<StateEntry> sortedByVaccinatedDesc() {
+    final output = List<StateEntry>.from(this);
+    output.sort((a, b) => b.status.vaccinated.compareTo(a.status.vaccinated));
+    return output;
+  }
+
+  List<StateEntry> sortedByNameAsc() {
+    final output = List<StateEntry>.from(this);
+    output.sort((a, b) => a.name.compareTo(b.name));
+    return output;
+  }
+
+  List<StateEntry> sortedBy(SortingType sortingType) {
+    switch (sortingType) {
+      case SortingType.byQuota:
+        return sortedByQuotaDesc();
+      case SortingType.byVaccinated:
+        return sortedByVaccinatedDesc();
+      case SortingType.byName:
+        return sortedByNameAsc();
+    }
+  }
+}
+
+enum SortingType { byQuota, byVaccinated, byName }
+
+extension SortingTypeExt on SortingType {
+  IconData get iconData {
+    switch (this) {
+      case SortingType.byQuota:
+        return Icons.trending_up;
+      case SortingType.byVaccinated:
+        return Icons.family_restroom;
+      case SortingType.byName:
+        return Icons.sort_by_alpha;
+    }
+  }
+
+  String get tooltip {
+    switch (this) {
+      case SortingType.byQuota:
+        return "Sort by Percentage";
+      case SortingType.byVaccinated:
+        return "Sort by Vaccinated Count";
+      case SortingType.byName:
+        return "Sort by Name";
+    }
+  }
+}
+
+class SecondRoute extends StatelessWidget {
+  const SecondRoute({Key key, this.entry}) : super(key: key);
+  final StateEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(entry.name),
+      ),
+      body: Placeholder(),
     );
   }
 }
