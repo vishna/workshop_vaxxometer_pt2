@@ -97,6 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final data = MediaQuery.of(context);
+    final isLandscape = data.size.width > data.size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),

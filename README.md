@@ -180,3 +180,12 @@ selectedIndex: currentIndex,
 /// ...bottom bar
 currentIndex: currentIndex,
 ```
+
+#### Adaptive navigation rail/bottom bar
+
+We need to switch between navigation rail/bottom bar based on screen ratio, for this we'll use `MediaQuery.of` (see [responsive layout](https://flutter.dev/docs/development/ui/layout/responsive) for more information)
+
+```dart
+final data = MediaQuery.of(context);
+final isLandscape = data.size.width > data.size.height;
+```
