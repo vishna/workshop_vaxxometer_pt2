@@ -131,3 +131,16 @@ You should end up having something looking similar to this:
           Expanded(
             child: FutureBuilder<List<StateEntry>>(
 ```
+
+similairly to `BottomBar` we can extract items outside:
+
+```dart
+final railItems = SortingType.values
+    .map((it) => NavigationRailDestination(
+          icon: Icon(it.iconData),
+          // FIXME :copy is too long
+          //label: Text(it.tooltip),
+          label: Text(""),
+        ))
+    .toList();
+```

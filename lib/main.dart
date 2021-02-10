@@ -104,23 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             },
             labelType: NavigationRailLabelType.selected,
-            destinations: [
-              NavigationRailDestination(
-                icon: Icon(Icons.favorite_border),
-                selectedIcon: Icon(Icons.favorite),
-                label: Text('First'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.bookmark_border),
-                selectedIcon: Icon(Icons.book),
-                label: Text('Second'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.star_border),
-                selectedIcon: Icon(Icons.star),
-                label: Text('Third'),
-              ),
-            ],
+            destinations: railItems,
           ),
           VerticalDivider(thickness: 1, width: 1),
           // app content
@@ -185,6 +169,15 @@ final barItems = SortingType.values
     .map((it) => BottomNavigationBarItem(
           icon: Icon(it.iconData),
           label: it.tooltip,
+        ))
+    .toList();
+
+final railItems = SortingType.values
+    .map((it) => NavigationRailDestination(
+          icon: Icon(it.iconData),
+          // FIXME :copy is too long
+          //label: Text(it.tooltip),
+          label: Text(""),
         ))
     .toList();
 
