@@ -49,10 +49,13 @@ class _RowWidget extends StatelessWidget {
         children: [
           // coat of arms
           if (imageUrl != null)
-            CachedNetworkImage(
-              height: 40.0,
-              width: 40.0,
-              imageUrl: imageUrl,
+            Hero(
+              tag: entry.name,
+              child: CachedNetworkImage(
+                height: 40.0,
+                width: 40.0,
+                imageUrl: imageUrl,
+              ),
             ),
           // data
           if (imageUrl != null) H_SPACING_8DP,
@@ -94,10 +97,13 @@ class _GridWidget extends StatelessWidget {
         children: [
           // coat of arms
           if (imageUrl != null)
-            CachedNetworkImage(
-              height: 100.0,
-              width: 100.0,
-              imageUrl: imageUrl,
+            Hero(
+              tag: entry.name,
+              child: CachedNetworkImage(
+                height: 100.0,
+                width: 100.0,
+                imageUrl: imageUrl,
+              ),
             ),
           // data
           if (imageUrl != null) V_SPACING_8DP,

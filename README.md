@@ -602,3 +602,49 @@ Center(
 
 [![](https://img.youtube.com/vi/o2KveVr7adg/0.jpg)](https://www.youtube.com/watch?v=o2KveVr7adg)
 
+### Hero Transition
+
+First let's make detail screen less boring and display coat of arms there centered.
+
+```dart
+class StateDetailScreen extends StatelessWidget {
+  const StateDetailScreen({Key key, this.entry}) : super(key: key);
+  final StateEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = coatOfArms[entry.name];
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(entry.name),
+      ),
+      body: Center(
+        child: CachedNetworkImage(
+          height: 200.0,
+          width: 200.0,
+          imageUrl: imageUrl,
+        ),
+      ),
+    );
+  }
+}
+```
+
+Let's use `Hero` widget to transition logo between screens!
+
+[![](https://img.youtube.com/vi/Be9UH1kXFDw/0.jpg)](https://www.youtube.com/watch?v=Be9UH1kXFDw)
+
+Hero element needs a unique tag, in our case we can use land's name for it, so:
+
+```dart
+Hero(
+  tag: entry.name,
+  child: CachedNetworkImage(
+    height: 40.0,
+    width: 40.0,
+    imageUrl: imageUrl,
+  ),
+)
+```
+
+This wrapping must happen both in `StateEntryWidget` and `StateDetailScreen` so that flutter can know how to connect the dots.

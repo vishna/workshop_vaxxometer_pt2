@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:vaxxometer/misc/coat_of_arms.dart';
 import 'package:vaxxometer/models/state_entry.dart';
 
 class StateDetailScreen extends StatelessWidget {
@@ -7,11 +9,21 @@ class StateDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = coatOfArms[entry.name];
     return Scaffold(
       appBar: AppBar(
         title: Text(entry.name),
       ),
-      body: Placeholder(),
+      body: Center(
+        child: Hero(
+          tag: entry.name,
+          child: CachedNetworkImage(
+            height: 200.0,
+            width: 200.0,
+            imageUrl: imageUrl,
+          ),
+        ),
+      ),
     );
   }
 }
