@@ -398,4 +398,20 @@ GridView.builder(
   ),
 ```
 
-This doesn't look good yet, but here's where `LayoutBuilder` comes in:
+This doesn't look good yet, but here's where `LayoutBuilder` comes in. We extract first `itemBuilder` closure which we can reuse across `ListView` and `GridView`
+
+```dart
+final itemBuilder = (context, index) => StateEntryWidget(
+  entry: items[index],
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StateDetailScreen(
+          entry: items[index],
+        ),
+      ),
+    );
+  },
+);
+```

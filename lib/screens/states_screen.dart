@@ -81,23 +81,24 @@ class _StatesScreenState extends State<StatesScreen> {
 
                   // we have data
                   final items = snapshot.data.sortedBy(sortingType);
+                  final itemBuilder = (context, index) => StateEntryWidget(
+                        entry: items[index],
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StateDetailScreen(
+                                entry: items[index],
+                              ),
+                            ),
+                          );
+                        },
+                      );
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    itemBuilder: (context, index) => StateEntryWidget(
-                      entry: items[index],
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => StateDetailScreen(
-                              entry: items[index],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    itemBuilder: itemBuilder,
                     itemCount: items.length,
                   );
                 }),
