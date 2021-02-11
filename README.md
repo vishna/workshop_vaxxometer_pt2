@@ -582,3 +582,23 @@ SliverGridDelegateWithFixedCrossAxisCount(
 
 We can also limit the grid size so it doesn't exceed e.g. width of `1000` on very large screens:
 
+```dart
+Center(
+  child: ConstrainedBox(
+  constraints: BoxConstraints(maxWidth: 800),
+  child: GridView.builder(
+    gridDelegate:
+        SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
+      mainAxisExtent: 250,
+    ),
+    itemBuilder: itemBuilder,
+    itemCount: items.length,
+  ),
+)
+```
+
+[![](https://img.youtube.com/vi/o2KveVr7adg/0.jpg)](https://www.youtube.com/watch?v=o2KveVr7adg)
+

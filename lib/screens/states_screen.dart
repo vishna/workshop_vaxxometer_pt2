@@ -96,15 +96,21 @@ class _StatesScreenState extends State<StatesScreen> {
                       );
                   return LayoutBuilder(builder: (context, constraints) {
                     if (constraints.maxWidth > 800.0) {
-                      return GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 8,
-                          mainAxisExtent: 250,
+                      return Center(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 800),
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 8,
+                              crossAxisSpacing: 8,
+                              mainAxisExtent: 250,
+                            ),
+                            itemBuilder: itemBuilder,
+                            itemCount: items.length,
+                          ),
                         ),
-                        itemBuilder: itemBuilder,
-                        itemCount: items.length,
                       );
                     } else {
                       return ListView.builder(
