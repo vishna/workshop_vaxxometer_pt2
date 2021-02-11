@@ -568,3 +568,17 @@ Padding(
   ),
 )
 ```
+
+We can further tweak the grid behavior by modifing delegate properties:
+
+```dart
+SliverGridDelegateWithFixedCrossAxisCount(
+  crossAxisCount: 2,
+  mainAxisSpacing: 8,
+  crossAxisSpacing: 8,
+  mainAxisExtent: 250,
+)
+```
+
+We can also limit the grid size so it doesn't exceed e.g. width of `1000` on very large screens:
+

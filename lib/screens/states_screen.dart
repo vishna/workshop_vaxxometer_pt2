@@ -99,6 +99,9 @@ class _StatesScreenState extends State<StatesScreen> {
                       return GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
+                          mainAxisSpacing: 8,
+                          crossAxisSpacing: 8,
+                          mainAxisExtent: 250,
                         ),
                         itemBuilder: itemBuilder,
                         itemCount: items.length,
