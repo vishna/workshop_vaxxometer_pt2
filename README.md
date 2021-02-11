@@ -376,3 +376,26 @@ class StateEntryWidget extends StatelessWidget {
 ```
 
 Therefore the existing closure needs to be moved from `StateEntryWidget` to `StatesScreen`
+
+### Adaptive Layout with Layout Builder
+
+So far our list work pretty ok in portrait mode, but as soon as we switch to landscape or desktop, there's a lot of wasted space.
+
+We want to fix this by introducing a grid if a width is more than `200`
+
+For this we'll use LayoutBuilder combined with GridView
+
+[![](https://img.youtube.com/vi/bLOtZDTm4H8/0.jpg)](https://www.youtube.com/watch?v=bLOtZDTm4H8)
+
+[![](https://img.youtube.com/vi/IYDVcriKjsw/0.jpg)](https://www.youtube.com/watch?v=IYDVcriKjsw)
+
+We can quickly change ListView to GridView with:
+
+```dart
+GridView.builder(
+  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 2,
+  ),
+```
+
+This doesn't look good yet, but here's where `LayoutBuilder` comes in:

@@ -81,7 +81,10 @@ class _StatesScreenState extends State<StatesScreen> {
 
                   // we have data
                   final items = snapshot.data.sortedBy(sortingType);
-                  return ListView.builder(
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
                     itemBuilder: (context, index) => StateEntryWidget(
                       entry: items[index],
                       onTap: () {
