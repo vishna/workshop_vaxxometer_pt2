@@ -437,4 +437,112 @@ return LayoutBuilder(builder: (context, constraints) {
 });
 ```
 
-Now we just need more suitable `StateEntryWidget` when we combine it with `GridView`. We'll adapt it again using `LayoutBuilder`
+Now we just need more suitable `StateEntryWidget` when we combine it with `GridView`. We'll adapt it again using `LayoutBuilder`. Let's refactor current Row friendly layout to `_RowWidget`:
+
+```dart
+class StateEntryWidget extends StatelessWidget {
+  final StateEntry entry;
+  final VoidCallback onTap;
+
+  const StateEntryWidget({Key key, this.entry, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _RowWidget(
+            entry: entry,
+          )),
+    );
+  }
+}
+
+class _RowWidget extends StatelessWidget {
+  const _RowWidget({Key key, this.entry}) : super(key: key);
+  final StateEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = coatOfArms[entry.name];
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          // coat of arms
+          if (imageUrl != null)
+            CachedNetworkImage(
+              height: 40.0,
+              width: 40.0,
+              imageUrl: imageUrl,
+            ),
+          // data
+          if (imageUrl != null) SPACING_8DP,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  entry.name,
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                Text(
+                    "${entry.status.vaccinated} out of ${entry.status.total} vaccinted"),
+              ],
+            ),
+          ),
+          SPACING_8DP,
+          Text(
+            "${entry.status.quote}%",
+            style: Theme.of(context).textTheme.headline4,
+          )
+        ],
+      ),
+    );
+  }
+}
+```
+
+Copy paste `_RowWidget` and rename it to `_SquareWidget`. Adjust it to look better in the grid.
+
+```dart
+class _GridWidget extends StatelessWidget {
+  const _GridWidget({Key key, this.entry}) : super(key: key);
+  final StateEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = coatOfArms[entry.name];
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // coat of arms
+          if (imageUrl != null)
+            CachedNetworkImage(
+              height: 100.0,
+              width: 100.0,
+              imageUrl: imageUrl,
+            ),
+          // data
+          if (imageUrl != null) V_SPACING_8DP,
+          Text(
+            entry.name,
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          V_SPACING_8DP,
+          Text(
+            "${entry.status.quote}%",
+            style: Theme.of(context).textTheme.headline4,
+          ),
+          V_SPACING_8DP,
+          Text(
+              "${entry.status.vaccinated} out of ${entry.status.total} vaccinted"),
+        ],
+      ),
+    );
+  }
+}
+```
