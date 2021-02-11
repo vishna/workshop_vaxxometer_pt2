@@ -94,13 +94,22 @@ class _StatesScreenState extends State<StatesScreen> {
                           );
                         },
                       );
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                    ),
-                    itemBuilder: itemBuilder,
-                    itemCount: items.length,
-                  );
+                  return LayoutBuilder(builder: (context, constraints) {
+                    if (constraints.maxWidth > 800.0) {
+                      return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                        itemBuilder: itemBuilder,
+                        itemCount: items.length,
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemBuilder: itemBuilder,
+                        itemCount: items.length,
+                      );
+                    }
+                  });
                 }),
           ),
         ],

@@ -381,7 +381,7 @@ Therefore the existing closure needs to be moved from `StateEntryWidget` to `Sta
 
 So far our list work pretty ok in portrait mode, but as soon as we switch to landscape or desktop, there's a lot of wasted space.
 
-We want to fix this by introducing a grid if a width is more than `200`
+We want to fix this by introducing a grid if a width is more than `800`
 
 For this we'll use LayoutBuilder combined with GridView
 
@@ -415,3 +415,26 @@ final itemBuilder = (context, index) => StateEntryWidget(
   },
 );
 ```
+
+Refactor and wrap our GridView with LayoutBuilder (refactor tool gives StreamBuilder as an option, use that and change signature).
+
+```dart
+return LayoutBuilder(builder: (context, constraints) {
+  if (constraints.maxWidth > 800.0) {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+      ),
+      itemBuilder: itemBuilder,
+      itemCount: items.length,
+    );
+  } else {
+    return ListView.builder(
+      itemBuilder: itemBuilder,
+      itemCount: items.length,
+    );
+  }
+});
+```
+
+Now we just need more suitable `StateEntryWidget` when we combine it with `GridView`. We'll adapt it again using `LayoutBuilder`
