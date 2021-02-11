@@ -16,10 +16,22 @@ class StateEntryWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _GridWidget(
-            entry: entry,
-          )),
+        padding: const EdgeInsets.all(8.0),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            /// if height has no constraints, it is a list view
+            if (constraints.hasBoundedHeight) {
+              return _GridWidget(
+                entry: entry,
+              );
+            } else {
+              return _RowWidget(
+                entry: entry,
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }

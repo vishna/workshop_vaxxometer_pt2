@@ -546,3 +546,25 @@ class _GridWidget extends StatelessWidget {
   }
 }
 ```
+
+Now we just need to make sure we use `_GridWidget` when in `GridView` and `_RowWidget` when in `ListView`. We can use `LayoutBuilder` for this again!
+
+```dart
+Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: LayoutBuilder(
+    builder: (context, constraints) {
+      /// if height has no constraints, it is a list view
+      if (constraints.hasBoundedHeight) {
+        return _GridWidget(
+          entry: entry,
+        );
+      } else {
+        return _RowWidget(
+          entry: entry,
+        );
+      }
+    },
+  ),
+)
+```
