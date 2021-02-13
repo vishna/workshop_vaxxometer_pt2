@@ -648,3 +648,37 @@ Hero(
 ```
 
 This wrapping must happen both in `StateEntryWidget` and `StateDetailScreen` so that flutter can know how to connect the dots.
+
+### Add split vaccine manufacturers to the details screen
+
+Add parsing for this part of the json respose:
+
+<img width="425" alt="Screenshot 2021-02-13 at 19 13 24" src="https://user-images.githubusercontent.com/121164/107857697-43358a80-6e30-11eb-8317-96fa79f3e70d.png">
+
+Add `VaccineSplit` class:
+
+```dart
+class VaccineSplit {
+  const VaccineSplit({this.biontech, this.moderna, this.astrazeneca});
+
+  final int biontech;
+  final int moderna;
+  final int astrazeneca;
+
+  factory VaccineSplit.fromJson(Map<String, dynamic> json) {
+    return VaccineSplit(
+      biontech: json['biontech'],
+      moderna: json['moderna'],
+      astrazeneca: json['astrazeneca'],
+    );
+  }
+}
+```
+
+and `split` field to the `VaccineStatus` class:
+
+```dart
+split: VaccineSplit.fromJson(json['vaccinated_by_accine']),
+```
+
+__NOTE:__ check the API response, it might be typo in __vaccinated_by_accine__ is fixed now.
