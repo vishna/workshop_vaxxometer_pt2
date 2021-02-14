@@ -864,3 +864,70 @@ extension ExtendedIterable<E> on Iterable<E> {
   }
 }
 ```
+
+Let's do some final tweaks, make Aspect Ratio 2:1, remove Card and change some positioning:
+
+```
+@override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 2,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: PieChart(
+                PieChartData(
+                    pieTouchData:
+                        PieTouchData(touchCallback: (pieTouchResponse) {
+                      setState(() {
+                        if (pieTouchResponse.touchInput is FlLongPressEnd ||
+                            pieTouchResponse.touchInput is FlPanEnd) {
+                          touchedIndex = -1;
+                        } else {
+                          touchedIndex = pieTouchResponse.touchedSectionIndex;
+                        }
+                      });
+                    }),
+                    borderData: FlBorderData(
+                      show: false,
+                    ),
+                    sectionsSpace: 0,
+                    centerSpaceRadius: 40,
+                    sections: showingSections()),
+              ),
+            ),
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              for (int i = 0; i < widget.manufactureres.length; i++) ...[
+                Indicator(
+                  color: _colors[i],
+                  text: widget.manufactureres[i].name,
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+              ],
+              SizedBox(
+                height: 18,
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 28,
+          ),
+        ],
+      ),
+    );
+  }
+```
+
+You should get something that look like this:
+
+<img width="667" alt="Screenshot 2021-02-14 at 17 17 22" src="https://user-images.githubusercontent.com/121164/107882252-88b58e80-6ee8-11eb-9ac0-9897b0e3cad1.png">

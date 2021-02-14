@@ -31,64 +31,58 @@ class PieChart2State extends State<PieChartSample2> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.3,
-      child: Card(
-        color: Colors.white,
-        child: Row(
-          children: <Widget>[
-            const SizedBox(
-              height: 18,
-            ),
-            Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: PieChart(
-                  PieChartData(
-                      pieTouchData:
-                          PieTouchData(touchCallback: (pieTouchResponse) {
-                        setState(() {
-                          if (pieTouchResponse.touchInput is FlLongPressEnd ||
-                              pieTouchResponse.touchInput is FlPanEnd) {
-                            touchedIndex = -1;
-                          } else {
-                            touchedIndex = pieTouchResponse.touchedSectionIndex;
-                          }
-                        });
-                      }),
-                      borderData: FlBorderData(
-                        show: false,
-                      ),
-                      sectionsSpace: 0,
-                      centerSpaceRadius: 40,
-                      sections: showingSections()),
-                ),
+      aspectRatio: 2,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: PieChart(
+                PieChartData(
+                    pieTouchData:
+                        PieTouchData(touchCallback: (pieTouchResponse) {
+                      setState(() {
+                        if (pieTouchResponse.touchInput is FlLongPressEnd ||
+                            pieTouchResponse.touchInput is FlPanEnd) {
+                          touchedIndex = -1;
+                        } else {
+                          touchedIndex = pieTouchResponse.touchedSectionIndex;
+                        }
+                      });
+                    }),
+                    borderData: FlBorderData(
+                      show: false,
+                    ),
+                    sectionsSpace: 0,
+                    centerSpaceRadius: 40,
+                    sections: showingSections()),
               ),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                for (int i = 0; i < widget.manufactureres.length; i++) ...[
-                  Indicator(
-                    color: _colors[i],
-                    text: widget.manufactureres[i].name,
-                    isSquare: true,
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              for (int i = 0; i < widget.manufactureres.length; i++) ...[
+                Indicator(
+                  color: _colors[i],
+                  text: widget.manufactureres[i].name,
+                  isSquare: true,
+                ),
                 SizedBox(
-                  height: 18,
+                  height: 4,
                 ),
               ],
-            ),
-            const SizedBox(
-              width: 28,
-            ),
-          ],
-        ),
+              SizedBox(
+                height: 18,
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 28,
+          ),
+        ],
       ),
     );
   }
