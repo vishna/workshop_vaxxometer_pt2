@@ -2,6 +2,10 @@
 
 ### Carry over work from 1st workshop
 
+In case you've missed the first vaxxometer workshop, check it out here:
+
+https://github.com/vishna/workshop_vaxxometer
+
 Make sure you have appropriate changes in:
 
 - lib/main.dart
@@ -649,7 +653,9 @@ Hero(
 
 This wrapping must happen both in `StateEntryWidget` and `StateDetailScreen` so that flutter can know how to connect the dots.
 
-### Add split vaccine manufacturers to the details screen
+## OPTIONAL
+
+### Add vaccine manufacturers parsing
 
 Add parsing for this part of the json respose:
 
@@ -679,3 +685,61 @@ manufacturers: vaccinated_by_accine.keys
 ```
 
 __NOTE:__ check the API response, it might be the typo in __vaccinated_by_accine__ has been fixed by the time you're reading this.
+
+### Display vaccine manufacturers in details screen
+
+Search pub.dev for some chart library and use it in details screen to display data.
+
+https://pub.dev/packages?q=chart
+
+I picked the first from the list - [fl_chart](https://pub.dev/packages/fl_chart). Looks fancy and I want to use [pie chart](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/pie_chart.md) to display these manufacturers info.
+
+Going to shamelessly copy-paste this snippet and then adapt it:
+
+https://github.com/imaNNeoFighT/fl_chart/blob/master/example/lib/pie_chart/samples/pie_chart_sample2.dart
+
+```
+cd lib/widgets
+wget https://raw.githubusercontent.com/imaNNeoFighT/fl_chart/master/example/lib/pie_chart/samples/pie_chart_sample2.dart
+# it will complain about missing indicator file so let's get that too
+wget https://raw.githubusercontent.com/imaNNeoFighT/fl_chart/master/example/lib/pie_chart/samples/indicator.dart
+```
+
+Then let's wrap our existing coat of arms with a Column using refactor tool and add `PieChartSample2`to the mix. We can remove `Center` widget and use column's mainAxisAlignment: MainAxisAlignment.center instead:
+
+```dart
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:vaxxometer/misc/coat_of_arms.dart';
+import 'package:vaxxometer/models/state_entry.dart';
+import 'package:vaxxometer/widgets/pie_chart_sample2.dart';
+
+class StateDetailScreen extends StatelessWidget {
+  const StateDetailScreen({Key key, this.entry}) : super(key: key);
+  final StateEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = coatOfArms[entry.name];
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(entry.name),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Hero(
+            tag: entry.name,
+            child: CachedNetworkImage(
+              height: 200.0,
+              width: 200.0,
+              imageUrl: imageUrl,
+            ),
+          ),
+          PieChartSample2(),
+        ],
+      ),
+    );
+  }
+}
+```
