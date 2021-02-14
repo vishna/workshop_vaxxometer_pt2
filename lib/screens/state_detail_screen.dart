@@ -26,7 +26,9 @@ class StateDetailScreen extends StatelessWidget {
               imageUrl: imageUrl,
             ),
           ),
-          PieChartSample2(),
+          PieChartSample2(
+            manufactureres: entry.status.manufacturers,
+          ),
         ],
       ),
     );

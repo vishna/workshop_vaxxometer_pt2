@@ -1,14 +1,31 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../models/vaccine_status.dart';
 import 'indicator.dart';
 
+const _colors = [
+  Colors.amber,
+  Colors.tealAccent,
+  Colors.blue,
+  Colors.redAccent,
+  Colors.green,
+  Colors.cyan,
+  Colors.brown,
+  Colors.indigo,
+  Colors.pinkAccent,
+  Colors.deepPurple
+];
+
 class PieChartSample2 extends StatefulWidget {
+  const PieChartSample2({Key key, this.manufactureres}) : super(key: key);
+  final List<VaccineManufacturer> manufactureres;
+
   @override
   State<StatefulWidget> createState() => PieChart2State();
 }
 
-class PieChart2State extends State {
+class PieChart2State extends State<PieChartSample2> {
   int touchedIndex;
 
   @override
@@ -27,7 +44,8 @@ class PieChart2State extends State {
                 aspectRatio: 1,
                 child: PieChart(
                   PieChartData(
-                      pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+                      pieTouchData:
+                          PieTouchData(touchCallback: (pieTouchResponse) {
                         setState(() {
                           if (pieTouchResponse.touchInput is FlLongPressEnd ||
                               pieTouchResponse.touchInput is FlPanEnd) {
@@ -50,36 +68,17 @@ class PieChart2State extends State {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const <Widget>[
-                Indicator(
-                  color: Color(0xff0293ee),
-                  text: 'First',
-                  isSquare: true,
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Indicator(
-                  color: Color(0xfff8b250),
-                  text: 'Second',
-                  isSquare: true,
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Indicator(
-                  color: Color(0xff845bef),
-                  text: 'Third',
-                  isSquare: true,
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Indicator(
-                  color: Color(0xff13d38e),
-                  text: 'Fourth',
-                  isSquare: true,
-                ),
+              children: <Widget>[
+                for (int i = 0; i < widget.manufactureres.length; i++) ...[
+                  Indicator(
+                    color: _colors[i],
+                    text: widget.manufactureres[i].name,
+                    isSquare: true,
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                ],
                 SizedBox(
                   height: 18,
                 ),
@@ -95,50 +94,35 @@ class PieChart2State extends State {
   }
 
   List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
-      final isTouched = i == touchedIndex;
+    /// https://stackoverflow.com/a/13611678
+    final int totalAmount = widget.manufactureres
+        .fold(0, (previous, current) => previous + current.amount);
+
+    return widget.manufactureres.mapIndexed((manufacturer, index) {
+      final isTouched = index == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
       final double radius = isTouched ? 60 : 50;
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: const Color(0xff0293ee),
-            value: 40,
-            title: '40%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-          );
-        case 1:
-          return PieChartSectionData(
-            color: const Color(0xfff8b250),
-            value: 30,
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-          );
-        case 2:
-          return PieChartSectionData(
-            color: const Color(0xff845bef),
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-          );
-        case 3:
-          return PieChartSectionData(
-            color: const Color(0xff13d38e),
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-          );
-        default:
-          return null;
-      }
-    });
+      final percentValue =
+          100.0 * manufacturer.amount.toDouble() / totalAmount.toDouble();
+      var title = manufacturer.amount.toString();
+      return PieChartSectionData(
+        color: _colors[index],
+        value: percentValue,
+        title: title,
+        radius: radius,
+        titleStyle: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+            color: Colors.black),
+      );
+    }).toList();
+  }
+}
+
+extension ExtendedIterable<E> on Iterable<E> {
+  /// Like Iterable<T>.map but callback have index as second argument
+  Iterable<T> mapIndexed<T>(T f(E e, int i)) {
+    var i = 0;
+    return this.map((e) => f(e, i++));
   }
 }

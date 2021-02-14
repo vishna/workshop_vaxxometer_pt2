@@ -743,3 +743,124 @@ class StateDetailScreen extends StatelessWidget {
   }
 }
 ```
+
+### Butcher PieChartSample2
+
+We have integrated a 3rd party component without knowing how it works, now we just need to make it display data we want.
+
+Inspecting `PieChart2State`'s `build` method reveals we have a "hardcoded" legend of `Indicator`s inside a `Column` and data set is provided by a `showingSections`. Moreover the pie chart requires a color which is not a part of our vaccination data so we need to come up with some replacement.
+
+We'll define a list of 10 unique colors and assign the to different vaccines based on the index in the array.
+
+```dart
+const _colors = [
+  Colors.amber,
+  Colors.tealAccent,
+  Colors.blue,
+  Colors.redAccent,
+  Colors.green,
+  Colors.cyan,
+  Colors.brown,
+  Colors.indigo,
+  Colors.pinkAccent,
+  Colors.deepPurple
+];
+```
+
+VSCode shows you colors next to the line number - picking colors that should be easy to distinguish from each other.
+
+<img width="246" alt="Screenshot 2021-02-14 at 15 17 29" src="https://user-images.githubusercontent.com/121164/107879215-d1188080-6ed7-11eb-88a2-91d2eec4a7b1.png">
+
+#### Pass data
+
+We need to pass list of manufacturers to the `PieChartSample2` widget. Let's define final field on the PieChartSample2.
+
+```dart
+const PieChartSample2({Key key, this.manufactureres}) : super(key: key);
+  final List<VaccineManufacturer> manufactureres;
+```
+
+Then go back to `StateDetailScreen` and pass those manufactureres:
+
+```dart
+PieChartSample2(
+  manufactureres: entry.status.manufacturers,
+)
+```
+
+Let's use this to array now to populate the legend:
+
+```dart
+Column(
+  mainAxisSize: MainAxisSize.max,
+  mainAxisAlignment: MainAxisAlignment.end,
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: <Widget>[
+    /// it's a for loop in an array!
+    for (int i = 0; i < widget.length; i++) ...[
+      Indicator(
+        color: _colors[i],
+        /// IMPORTANT: fix state class to extend from State<PieChartSample2>
+        /// otherwise you won't be able to access manufacturers field
+        text: widget.manufactureres[i].name,
+        isSquare: true,
+      ),
+      SizedBox(
+        height: 4,
+      ),
+    ],
+    SizedBox(
+      height: 18,
+    ),
+  ],
+),
+```
+
+Finally let's give the right numbers to the pie itself. First, we need total amount:
+
+```dart
+/// https://stackoverflow.com/a/13611678
+final int totalSum = widget.manufactureres
+    .fold(0, (previous, current) => previous + current.amount);
+```
+
+Then we need our manufacturers list to a list of `PieChartSecionData` thus:
+
+```dart
+List<PieChartSectionData> showingSections() {
+  /// https://stackoverflow.com/a/13611678
+  final int totalAmount = widget.manufactureres
+      .fold(0, (previous, current) => previous + currentamount);
+
+  return widget.manufactureres.mapIndexed((manufacturer,index) {
+    final isTouched = index == touchedIndex;
+    final double fontSize = isTouched ? 25 : 16;
+    final double radius = isTouched ? 60 : 50;
+    final percentValue =
+        100.0 * manufacturer.amount.toDouble() /totalAmount.toDouble();
+    var title = manufacturer.amount.toString();
+    return PieChartSectionData(
+      color: _colors[index],
+      value: percentValue,
+      title: title,
+      radius: radius,
+      titleStyle: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: Colors.black),
+    );
+  }).toList();
+}
+```
+
+Dart doesn't come with `mapIndexed` method - we'll define ours instead:
+
+```dart
+extension ExtendedIterable<E> on Iterable<E> {
+  /// Like Iterable<T>.map but callback have index as second argument
+  Iterable<T> mapIndexed<T>(T f(E e, int i)) {
+    var i = 0;
+    return this.map((e) => f(e, i++));
+  }
+}
+```
