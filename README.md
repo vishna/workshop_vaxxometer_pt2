@@ -655,30 +655,27 @@ Add parsing for this part of the json respose:
 
 <img width="425" alt="Screenshot 2021-02-13 at 19 13 24" src="https://user-images.githubusercontent.com/121164/107857697-43358a80-6e30-11eb-8317-96fa79f3e70d.png">
 
-Add `VaccineSplit` class:
+Add `VaccineManufacturer` class:
 
 ```dart
-class VaccineSplit {
-  const VaccineSplit({this.biontech, this.moderna, this.astrazeneca});
+class VaccineManufacturer {
+  const VaccineManufacturer({this.name, this.amount});
 
-  final int biontech;
-  final int moderna;
-  final int astrazeneca;
-
-  factory VaccineSplit.fromJson(Map<String, dynamic> json) {
-    return VaccineSplit(
-      biontech: json['biontech'],
-      moderna: json['moderna'],
-      astrazeneca: json['astrazeneca'],
-    );
-  }
+  final String name;
+  final int amount;
 }
 ```
 
-and `split` field to the `VaccineStatus` class:
+and `manufacturers` field to the `VaccineStatus` class:
 
 ```dart
-split: VaccineSplit.fromJson(json['vaccinated_by_accine']),
+final vaccinated_by_accine =
+        json['vaccinated_by_accine'] as Map<String, dynamic>;
+
+manufacturers: vaccinated_by_accine.keys
+  .map((name) => VaccineManufacturer(
+      name: name, amount: vaccinated_by_accine[name]))
+  .toList()
 ```
 
-__NOTE:__ check the API response, it might be typo in __vaccinated_by_accine__ is fixed now.
+__NOTE:__ check the API response, it might be the typo in __vaccinated_by_accine__ has been fixed by the time you're reading this.
