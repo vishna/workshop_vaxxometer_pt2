@@ -931,3 +931,52 @@ Let's do some final tweaks, make Aspect Ratio 2:1, remove Card and change some p
 You should get something that look like this:
 
 <img width="667" alt="Screenshot 2021-02-14 at 17 17 22" src="https://user-images.githubusercontent.com/121164/107882252-88b58e80-6ee8-11eb-9ac0-9897b0e3cad1.png">
+
+### Or try different library...
+
+E.g. https://pub.dev/packages/charts_flutter
+
+```dart
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:vaxxometer/misc/coat_of_arms.dart';
+import 'package:vaxxometer/misc/design.dart';
+import 'package:vaxxometer/models/state_entry.dart';
+import 'package:vaxxometer/widgets/donut_auto_label_chart.dart';
+
+class StateDetailScreen extends StatelessWidget {
+  const StateDetailScreen({Key key, this.entry}) : super(key: key);
+  final StateEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = coatOfArms[entry.name];
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(entry.name),
+      ),
+      body: ListView(
+        children: [
+          V_SPACING_8DP,
+          Hero(
+            tag: entry.name,
+            child: CachedNetworkImage(
+              height: 200.0,
+              width: 200.0,
+              imageUrl: imageUrl,
+            ),
+          ),
+          V_SPACING_8DP,
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 600, maxHeight: 600),
+            child: Center(child: DonutAutoLabelChart.withSampleData()),
+          ),
+          V_SPACING_8DP,
+        ],
+      ),
+    );
+  }
+}
+```
+
+then we just need to adapt `withSampleData`
